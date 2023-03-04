@@ -1,0 +1,96 @@
+.input {
+    display: block;
+    margin: 7px 0;
+    padding: 9px 40px 9px 15px;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 5px 0px;
+    font-size: 16px;
+}
+
+.label {
+    color: rgba(70, 70, 70, 0.7);
+    font-size: 12px;
+}
+
+.alertLabel {
+    color: rgba(197, 2, 2, 0.85);
+    font-size: 12px;
+    display: block;
+}
+
+.radio {
+    display: block;
+    margin-left: 5px;
+}
+
+.payBtn {
+    margin: 12px 5px 5px 3px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 7px;
+	color: #fefefe;
+	background-color: #444444;
+    font-size: 16px;
+	font-family: inherit;
+}
+
+.formBtn {
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 7px;
+	color: #fefefe;
+	background-color: #444444;
+    font-size: 16px;
+	font-family: inherit;
+}
+
+.quizBtn {
+    padding: 0 40px;
+    margin-top: 10px;
+	border-style: none;
+	border-radius: 7px;
+    font-size: 12px;
+	font-family: inherit;
+    background-color: #f0f0f0;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 5px 0px;
+}
+
+.payMsg {
+    display: block;
+    margin: 4px 6px 12px 0;
+}
+
+.centeredGrid {
+    display: grid;
+	place-items: center;
+	justify-self: center;
+	padding: 10px 20px 10px 20px;
+}
+
+.line {
+    display: block;
+    margin-top: 5px;
+    padding: 10px 30px 20px 30px;
+    border-top-right-radius: 6px;
+    box-shadow: 7px;
+    background-color: #f0f0f0;
+}
+
+.specialLine {
+    display: block;
+    padding: 12px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    font-size: 20px;
+    text-align: center;
+}
+
+.quizBox {
+    display: block;
+    padding: 12px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    font-size: 20px;
+}

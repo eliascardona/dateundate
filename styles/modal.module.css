@@ -1,0 +1,45 @@
+.globalContainer {
+	background-color: rgb(46 56 77 / 30%);
+	z-index: 0;
+	display: grid;
+	place-items: center;
+	align-self: center;
+}
+
+.modalContainer {
+	width: 100%;
+	height: 100%;
+	gap: 20px;
+	pointer-events: auto;
+	position: fixed;
+	top: 0;
+	display: grid;
+	place-items: center;
+	align-self: center;
+	background-color: #ffffff;
+	box-sizing: border-box;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	border: 1px solid var(--gh-grey-4);
+	border-radius: 4px;
+	outline: 0;
+	padding: 8px 24px;
+	margin: 0 auto;
+	transform: translateY(all 5s linear);
+}
+
+.formBtn {
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 7px;
+	color: #fefefe;
+	background-color: #444444;
+    font-size: 16px;
+	font-family: inherit;
+}
+
+.centeredGrid {
+    display: grid;
+	place-items: center;
+	justify-self: center;
+}

@@ -1,0 +1,159 @@
+.introSection {
+	color: #fefefe;
+	background-color: #181818;
+}
+
+.videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+}
+
+.videoWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 92%;
+    height: 92%;
+    margin: 0 4% 0 4%;
+    border-radius: 3px;
+}
+
+.highlighted {
+	font-size: 25px;
+	font-weight: 600;
+}
+
+.semiHl {
+	font-size: 22px;
+	font-weight: 400;
+}
+
+.blue {
+	font-size: inherit;
+	font-weight: inherit;
+	color: rgb(0, 204, 255);
+}
+
+.gray {
+	font-size: inherit;
+	font-weight: inherit;
+	color: #808080;
+}
+
+.megaTitleBlue {
+	font-size: 64;
+	color: #fefefe;
+	background-color: rgb(0, 204, 255);
+	padding: 10px 20px 10px 20px;
+	border-radius: 10px;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.megaTitleBlack {
+	font-size: 64;
+	color: #fefefe;
+	background-color: #0a0a0a;
+	padding: 10px 20px 10px 20px;
+	border-radius: 10px;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.cover {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	overflow: hidden;
+	display: block;
+}
+
+.cover .img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.circle {
+	border-radius: 50%;
+}
+
+.btnPos {
+	position: fixed;
+	bottom: 50px;
+	left: 20%;
+}
+
+.formBtn {
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 7px;
+	color: #fefefe;
+	background-color: #444444;
+    font-size: 16px;
+	font-family: inherit;
+}
+
+.sellBtn {
+	margin: 5px;
+	padding: 0 35px 0 35px;
+	border-style: none;
+	border-radius: 50px;
+	color: #fefefe;
+	background-color: rgb(0, 102, 255);
+	font-family: inherit;
+}
+
+.sellBtn span {
+	display: inline-block;
+	font-size: 36px;
+	font-weight: 550;
+}
+
+.textCenter {
+	text-align: center;
+}
+
+.centeredGrid {
+    display: flex;
+	align-items: center;
+	justify-content: center;
+	/* place-items: center;
+	justify-self: center; */
+}
+
+.col6 {
+    display: grid;
+	grid-template-columns: 50% 50%;
+	column-gap: 15px;
+	margin: 10px;
+	padding: 20px;
+}
+
+.el {
+	display: grid;
+	place-items: center;
+	justify-self: center;
+}
+
+/* Media Query for mobile (480 px) */
+@media (max-width: 480px) {
+	.sellBtn {
+		margin: 15px;
+		padding: 10px 20px 7px 20px;
+	}
+	.sellBtn span {
+		font-size: 20px;
+		font-weight: 700;
+		margin-top: 2px;
+		margin-bottom: 4px;
+		display: inline;
+	}
+	.sellBtn small {
+		display: block;
+		margin-top: 5px;
+	}
+	.sellBtn ion-icon {
+		font-size: 20px;
+	}
+}

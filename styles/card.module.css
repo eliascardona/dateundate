@@ -1,0 +1,33 @@
+.card {
+	align-self: center;
+	width: 60%;
+	margin-top: 15px;
+	padding: 20px 50px 20px 30px;
+	background-color: #fefefe;
+	border-radius: 6px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 5px 0px;
+}
+
+.cardLyOne {
+	display: grid;
+	grid-template-columns: 100%;
+	column-gap: 8%;
+	align-items: center;
+	justify-self: center;
+}
+
+.iconContainer {
+	padding: 3px 5px;
+	border: 1px solid #0a0a0a;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.cardImage {
+	margin-top: 15px;
+	padding: 20px;
+	color: #0a0a0a;
+	background-color: #fefefe;
+	border-radius: 6px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 5px 0px;
+}
