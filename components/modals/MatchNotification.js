@@ -1,9 +1,8 @@
 import React from 'react'
-import styles from "../styles/modal.module.css"
+import styles from "../../styles/modal.module.css"
 
-export const Notification = ({ openNotif, setOpenNotif, notTo, title }) => {
+export const MatchNotification = ({ openNotif, setOpenNotif, notTo, title }) => {
     return (
-        openNotif &&
         <div className={styles.globalContainer}>
             <div className={styles.modalContainer}>
                 <div className={styles.centeredGrid} style={{marginTop:'15px', marginBottom:'15px'}}>

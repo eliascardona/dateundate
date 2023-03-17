@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { auth } from "../firebase/base";
+import { auth } from "../../firebase/base";
 import { signOut } from "firebase/auth";
 
 export const PageHeader = () => {

@@ -13,6 +13,7 @@
 	pointer-events: auto;
 	position: fixed;
 	top: 0;
+	z-index: 2;
 	display: grid;
 	place-items: center;
 	align-self: center;
@@ -27,6 +28,12 @@
 	transform: translateY(all 5s linear);
 }
 
+.btnPos {
+	position: fixed;
+	bottom: 50px;
+	left: 27px;
+}
+
 .formBtn {
     margin: 5px;
 	padding: 10px 50px 10px 50px;
@@ -35,6 +42,19 @@
 	color: #fefefe;
 	background-color: #444444;
     font-size: 16px;
+	font-family: inherit;
+}
+
+.specialBtn {
+    width: 110%;
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 30px;
+	color: #fefefe;
+	background-color: rgb(0, 102, 255);
+    font-size: 20px;
+    font-weight: 450;
 	font-family: inherit;
 }
 

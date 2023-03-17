@@ -1,6 +1,6 @@
 import React from 'react'
 import { Signup } from '../components/vitals/Signup'
-import { PageHeader } from '../components/PageHeader'
+import { PageHeader } from '../components/utils/PageHeader'
 import styles from '../styles/login.module.css'
 
 function signup() {

@@ -32,3 +32,12 @@ ion-icon {
     font-size: 20px;
   }
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #444444;
+  border-radius: 12px;
+}

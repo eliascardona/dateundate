@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react"
 import { auth } from "../firebase/base"
 import { sendPasswordResetEmail } from "firebase/auth"
-import styles from "../styles/forms.module.css"
 import { useRouter } from "next/router"
+import { PageHeader } from '../components/utils/PageHeader'
+import styles from "../styles/forms.module.css"
 
-export const Login = () => {
+function forgotPass() {
   const router = useRouter()
   const emailRef = useRef()
   const [error, setError] = useState("")
@@ -18,25 +19,32 @@ export const Login = () => {
   
   return (
     <>
-      <h2>Recuperar contraseña</h2>
-        <span>Ingresa el correo con el que te registraste</span>
-        <input
-          type="email"
-          ref={emailRef}
-          placeholder="name@somemail.com"
-          className={styles.input}
-        />
-        <small className={styles.payMsg}>
-          {error}
-        </small>
-        <br/>
-        <button
-          type="button"
-          onClick={requestLink}
-          className={styles.formBtn}
-        >
-          Enviar código
-        </button>
+      <PageHeader />
+      <div className={styles.centeredForm}>
+        <div className={styles.cardWhite}>
+          <h2>Recuperar contraseña</h2>
+            <span>Ingresa el correo con el que te registraste</span>
+            <input
+              type="email"
+              ref={emailRef}
+              placeholder="name@somemail.com"
+              className={styles.input}
+            />
+            <small className={styles.payMsg}>
+              {error}
+            </small>
+            <br/>
+            <button
+              type="button"
+              onClick={requestLink}
+              className={styles.formBtn}
+            >
+              Enviar código
+            </button>
+          </div>
+        </div>
     </>
   )
 }
+
+export default forgotPass
