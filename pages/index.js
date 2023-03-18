@@ -3,6 +3,10 @@ import { auth, firestore } from "../firebase/base"
 import {
   collection,
   getDocs,
+  doc,
+  getDoc,
+  query,
+  where
 } from "firebase/firestore"
 import { onAuthStateChanged } from "firebase/auth"
 import { Button } from "../components/utils/Button"
@@ -19,6 +23,7 @@ function Home() {
   const [users, setUsers] = useState([])
   const [openModal, setOpenModal] = useState(false)
   const [openNotif, setOpenNotif] = useState(false)
+  const [owner, setOwner] = useState()
   
   useEffect(() => {
     const checkUserEmail = () => {
@@ -29,6 +34,19 @@ function Home() {
     }
     checkUserEmail()
   }, [])
+
+  useEffect(() => {
+    const getOwner = async () => {
+      const docRef = doc(firestore, "users", userEmail);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setOwner(docSnap.data());
+      } else {
+        console.log("No user");
+      }
+    };
+    userEmail && getOwner();
+  }, [userEmail]);
   
   useEffect(() => {
     const getData = async () => {
@@ -58,6 +76,45 @@ function Home() {
     getData()
   }, [])
   
+  let objetoRemitente = async function() {
+    const collRef = collection(firestore, "users")
+    const remitente = query(collRef, where("username", "==", owner.username))
+    const consultaRemitente = await getDocs(remitente)
+    let objRemitente
+    objRemitente = consultaRemitente.docs[0].data().likes
+    return objetoRemitente
+  }
+
+  let auxArr1 = []
+
+  let globalLikesArr = async function () {
+    users.forEach((itm, i, arr) => {
+      auxArr1.push(itm.likes)
+    })
+    return auxArr1
+  }
+  
+  useEffect(() => {
+    globalLikesArr().then(globalLikes => {
+
+      console.log("arreglo de likes globlaes: ")
+      console.log(globalLikes)
+      
+      // console.log("arreglo matches: ")
+      // objetoRemitente().then(remLikes => {
+        
+      //   remLikes.forEach(itm => 
+      //     globalLikes.filter(itmJ => {
+      //       if (itm === itmJ)
+      //         console.log(`match de ${itm} e ${itmJ}`)
+      //     })
+      //   )
+
+      // })
+      
+    })
+  }, [])
+  
   // useEffect(() => {
   //   const handle = setInterval(async () => {
   //     minTime = min(posts.flat())
@@ -73,8 +130,6 @@ function Home() {
         <h1>ADAM LIKES YOU 🤑</h1>
         {
           posts.map((post, i, arr) => {
-            // const owner = users?.find((user) => user.email == post.remitente)
-            // const receiver = users?.find((user) => user.email == post.destinatario)
             return (
               <>
                 <Card 
