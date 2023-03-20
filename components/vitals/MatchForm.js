@@ -65,38 +65,39 @@ export const MatchForm = () => {
   const [mainSubject, setMainSubject] = useState("");
 
   const confessCrush = async () => {
-    setErr(""); //Si ya hay un mensaje de error, lo borra.
-    if (mainSubject[0] != "@") {
-      //Si el usuario no ingreso el "@" lo ingresamos nosotros.
-      mainSubject = `@${mainSubject}`;
-    }
+    setErr("");
     const usersRef = collection(firestore, "users");
+    
+    //Si el usuario no ingreso el "@" lo ingresamos nosotros.
+    if (mainSubject[0] != "@") {
+      mainSubject = `@${mainSubject}`;
+      //Pendiente, no prioridad: Aquí se deben de eliminar todos los espacios
+      //Ejemplo '@alex '
+    }
+
     //Consultar perfil del destinatario
     const destinatario = query(usersRef, where("username", "==", mainSubject));
     const consultaDesatinatario = await getDocs(destinatario);
     let objetoDestinatario = {};
-    objetoDestinatario = consultaDesatinatario.docs[0]
-      ? consultaDesatinatario.docs[0].data()
-      : undefined;
-
+    objetoDestinatario = consultaDesatinatario.docs[0] ? consultaDesatinatario.docs[0].data() : undefined;
+      
+    //Consultar perfil del remitente
+    //A pesar de que sea un arreglo, la variable la dejamos como 'objetoRemitente'
+    const remitente = query(usersRef, where("username", "==", owner.username));
+    const consultaRemitente = await getDocs(remitente);
+    let objetoRemitente;
+    objetoRemitente = consultaRemitente.docs[0].data().likes;
+    
     if (objetoDestinatario) {
+      let docID = `p${nm}`;
       await updateDoc(doc(firestore, "users", objetoDestinatario.email), {
         likes: arrayUnion(owner.username),
       });
-      let docID = `confesion${nm}`;
-      await setDoc(doc(firestore, "confesiones", docID), {
+      await setDoc(doc(firestore, "posts", docID), {
         remitente: owner.username,
         destinatario: mainSubject,
         cardID: docID,
       });
-      //Consultar perfil del remitente para ver si tiene en su lista de likes la persona que le gusta
-      const remitente = query(
-        usersRef,
-        where("username", "==", owner.username)
-      );
-      const consultaRemitente = await getDocs(remitente);
-      let objetoRemitente;
-      objetoRemitente = consultaRemitente.docs[0].data().likes;
 
       console.log(objetoRemitente);
       //Verificar si hay match viendo si existe el perfil en los likes del remitente
@@ -107,23 +108,20 @@ export const MatchForm = () => {
         setOpenNotif(true)
 
         //Agregar doc con sus respectivos matches
-        await setDoc(doc(firestore, "Matches", objetoDestinatario.username), {
-          'Match con': arrayUnion(consultaRemitente.docs[0].data().username),
+        await setDoc(doc(firestore, "matches", objetoDestinatario.username), {
+          'match-con': arrayUnion(consultaRemitente.docs[0].data().username),
         });
-
-        await setDoc(
-          doc(firestore, "Matches", consultaRemitente.docs[0].data().username),
-          {
-            'Match con': arrayUnion(objetoDestinatario.username),
-          }
-        );
+        
+        await setDoc(doc(firestore, "matches", consultaRemitente.docs[0].data().username), {
+          'match-con': arrayUnion(objetoDestinatario.username),
+        });
       }
 
     } else {
       setErr("El usuario ingresado no existe, vuelve a intentar.");
     }
   };
-
+  
   return (
     <div>
       <h2>Confiesa tu ligue</h2>

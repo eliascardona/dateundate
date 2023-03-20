@@ -28,6 +28,8 @@ export const Signup = () => {
       const q = query(usersRef, where("username", "==", `@${username}`))
       const querySnapshot = await getDocs(q)
       setUsernameAllowed(querySnapshot.docs.length === 0)
+      //Pendiente, no prioridad: Aquí se deben de eliminar todos los espacios
+      // ejemplo '@alex '
     }
     checkUsername()
     return (setUsernameAllowed(undefined))

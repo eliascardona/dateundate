@@ -76,48 +76,41 @@ function Home() {
     getData()
   }, [])
   
-  let objetoRemitente = async function() {
-    const collRef = collection(firestore, "users")
-    const remitente = query(collRef, where("username", "==", owner.username))
-    const consultaRemitente = await getDocs(remitente)
-    let objRemitente
-    objRemitente = consultaRemitente.docs[0].data().likes
-    return objetoRemitente
-  }
-
-  let auxArr1 = []
-
-  let globalLikesArr = async function () {
-    users.forEach((itm, i, arr) => {
-      auxArr1.push(itm.likes)
-    })
-    return auxArr1
-  }
+  // IDEA DE FUNCION PARA BUSCAR LOS MATCHES
+  //
+  // let globalLikesArr = async function () {
+  //   let auxArr1 = []
+  //   users.forEach((itm, i, arr) => {
+  //     auxArr1.push(itm.likes)
+  //   })
+  //   return auxArr1
+  // }
   
-  useEffect(() => {
-    globalLikesArr().then(globalLikes => {
-
-      console.log("arreglo de likes globlaes: ")
-      console.log(globalLikes)
-      
-      // console.log("arreglo matches: ")
-      // objetoRemitente().then(remLikes => {
-        
-      //   remLikes.forEach(itm => 
-      //     globalLikes.filter(itmJ => {
-      //       if (itm === itmJ)
-      //         console.log(`match de ${itm} e ${itmJ}`)
-      //     })
-      //   )
-
-      // })
-      
-    })
-  }, [])
+  // let objetoRemitente = async function() {
+  //   const collRef = collection(firestore, "users")
+  //   const remitente = query(collRef, where("username", "==", owner.username))
+  //   const consultaRemitente = await getDocs(remitente)
+  //   let objRemitente
+  //   objRemitente = consultaRemitente.docs[0].data().likes
+  //   return objetoRemitente
+  // }
   
+  // globalLikesArr().then(globalLikes => {
+  //   objetoRemitente().then(remLikes => {
+  //     remLikes.forEach(itm => 
+  //       globalLikes.filter(itmJ => {
+  //         if (itm === itmJ)
+  //           console.log(`match de ${itm} e ${itmJ}`)
+  //       })
+  //     )
+  //   })
+  // })
+  
+  // IDEA DE FUNCION PARA REVISAR CUAL DE LOS MATCH SUCEDIO PRIMERO
+  //
   // useEffect(() => {
   //   const handle = setInterval(async () => {
-  //     minTime = min(posts.flat())
+  //     minTime = min(match.hour.flat())
   //   }, 30*1000);
 
   //   return () => clearInterval(handle);
