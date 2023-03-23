@@ -1,127 +1,168 @@
-import React, { useEffect, useRef, useState } from "react";
-import { auth, firestore } from "../../firebase/base";
-import { onAuthStateChanged } from "firebase/auth";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { auth, firestore } from '../../firebase/base';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   updateDoc,
   where,
-} from "firebase/firestore";
-import styles from "../../styles/forms.module.css";
-import { nm, currTime } from "../../utils/utils";
-import { MatchNotification } from "../modals/MatchNotification"
+} from 'firebase/firestore';
+import styles from '../../styles/forms.module.css';
+import { nm, currTime } from '../../utils/utils';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export const MatchForm = () => {
-  const [userEmail, setUserEmail] = useState();
+  const authData = useContext(AuthContext);
   const [owner, setOwner] = useState();
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState('');
   const usernameRef = useRef();
-  const [notTo, setNotTo] = useState("");
-  const [openNotif, setOpenNotif] = useState(false);
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
+  const [ganadores, setGanadores] = useState();
+
+  //get users collection data
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(firestore, 'users'),
+      (querySnapshot) => {
+        const res = [];
+        querySnapshot.forEach((doc) => {
+          res.push(doc.data());
+        });
+        setUsers(res);
+      }
+    );
+    return unsubscribe;
+  }, [authData]);
+
+  //get owner data
+  useEffect(() => {
+    const q = query(
+      collection(firestore, 'users'),
+      where('email', '==', authData.user ? authData.user.email : '')
+    );
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      querySnapshot.docs[0] && setOwner(querySnapshot.docs[0].data());
+    });
+    return unsubscribe;
+  }, [authData]);
 
   useEffect(() => {
-    const checkUserEmail = () => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) setUserEmail(user.email);
-      });
-    };
-    checkUserEmail();
+    const unsubscribe = onSnapshot(
+      collection(firestore, 'ganadores'),
+      (querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push(doc.data());
+        });
+        setGanadores({
+          porMasLikes: data[0],
+          porPrimerosMatches: data[1],
+        });
+      }
+    );
+    return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    const getData = async () => {
-      const data = []
-      const collRef = collection(firestore, "users")
-      const coll = await getDocs(collRef)
-      let postDocs = coll.docs
-      postDocs.forEach(info => {
-        data.push(info.data())
-      })
-      setUsers(data)
-    }
-    getData()
-  }, [])
-
-  useEffect(() => {
-    const getOwner = async () => {
-      const docRef = doc(firestore, "users", userEmail);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setOwner(docSnap.data());
-      } else {
-        console.log("No user");
-      }
-    };
-    userEmail && getOwner();
-  }, [userEmail]);
-  
   // let userName = usernameRef.current.value
-  const [mainSubject, setMainSubject] = useState("");
+  const [mainSubject, setMainSubject] = useState('');
 
   const confessCrush = async () => {
-    setErr("");
-    const usersRef = collection(firestore, "users");
-    
+    setErr('');
+    const usersRef = collection(firestore, 'users');
+
     //Si el usuario no ingreso el "@" lo ingresamos nosotros.
-    if (mainSubject[0] != "@") {
+    mainSubject = mainSubject.trim(); //Elimina espacios en las puntas.
+    if (mainSubject[0] != '@') {
       mainSubject = `@${mainSubject}`;
-      //Pendiente, no prioridad: Aquí se deben de eliminar todos los espacios
+      //Pendiente, no prioridad: Aquí se deben de eliminar todos los espacios (HECHO)
       //Ejemplo '@alex '
     }
 
+    if (mainSubject == owner.username) {
+      setErr('No puedes ingresar tu propio usuario.');
+      return;
+    }
+
     //Consultar perfil del destinatario
-    const destinatario = query(usersRef, where("username", "==", mainSubject));
+    const destinatario = query(usersRef, where('username', '==', mainSubject));
     const consultaDesatinatario = await getDocs(destinatario);
-    let objetoDestinatario = {};
-    objetoDestinatario = consultaDesatinatario.docs[0] ? consultaDesatinatario.docs[0].data() : undefined;
-      
+    const objetoDestinatario = consultaDesatinatario.docs[0]
+      ? consultaDesatinatario.docs[0].data()
+      : undefined;
+
     //Consultar perfil del remitente
     //A pesar de que sea un arreglo, la variable la dejamos como 'objetoRemitente'
-    const remitente = query(usersRef, where("username", "==", owner.username));
+    const remitente = query(usersRef, where('username', '==', owner.username));
     const consultaRemitente = await getDocs(remitente);
-    let objetoRemitente;
-    objetoRemitente = consultaRemitente.docs[0].data().likes;
-    
+    const objetoRemitente = consultaRemitente.docs[0].data().likes;
+    const usernameRemitente = consultaRemitente.docs[0].data().username;
+
     if (objetoDestinatario) {
-      let docID = `p${nm}`;
-      await updateDoc(doc(firestore, "users", objetoDestinatario.email), {
+      let docID = `p${nm()}`;
+      let date = new Date();
+      await updateDoc(doc(firestore, 'users', objetoDestinatario.email), {
         likes: arrayUnion(owner.username),
-      });
-      await setDoc(doc(firestore, "posts", docID), {
+      })
+      const updatedDestinatario = await getDoc(doc(firestore, 'users', objetoDestinatario.email)).then((doc) => doc.data())
+
+      if(updatedDestinatario.likes.length > ganadores.porMasLikes.likes) {
+        setDoc(doc(firestore, 'ganadores', 'porMasLikes'), {
+          likes: updatedDestinatario.likes.length,
+          username: updatedDestinatario.username
+        })
+      }
+
+      await setDoc(doc(firestore, 'posts', docID), {
         remitente: owner.username,
         destinatario: mainSubject,
         cardID: docID,
+        timestamp: date.getTime(),
       });
 
-      console.log(objetoRemitente);
       //Verificar si hay match viendo si existe el perfil en los likes del remitente
       if (objetoRemitente.includes(objetoDestinatario.username)) {
-        
-        //parte grafica
-        setNotTo(objetoDestinatario.username)
-        setOpenNotif(true)
-
+        const usersArr = [
+          usernameRemitente,
+          objetoDestinatario.username,
+        ].sort();
         //Agregar doc con sus respectivos matches
-        await setDoc(doc(firestore, "matches", objetoDestinatario.username), {
-          'match-con': arrayUnion(consultaRemitente.docs[0].data().username),
-        });
-        
-        await setDoc(doc(firestore, "matches", consultaRemitente.docs[0].data().username), {
-          'match-con': arrayUnion(objetoDestinatario.username),
-        });
-      }
+        await setDoc(
+          doc(
+            firestore,
+            'matches',
+            `${usernameRemitente}-${objetoDestinatario.username}`
+          ),
+          {
+            users: usersArr,
+            timestamp: date.toISOString(),
+          }
+        );
 
+        if (
+          ganadores.porPrimerosMatches.matches.length < 3 &&
+          ganadores.porPrimerosMatches.matches.filter(
+            (i) => JSON.stringify(i.personas) == JSON.stringify(usersArr)
+          ).length == 0
+        ) {
+          updateDoc(doc(firestore, 'ganadores', 'porPrimerosMatches'), {
+            matches: arrayUnion({
+              personas: usersArr,
+              timestamp: date.toISOString(),
+            }),
+          });
+        }
+      }
     } else {
-      setErr("El usuario ingresado no existe, vuelve a intentar.");
+      setErr('El usuario ingresado no existe, vuelve a intentar.');
     }
   };
-  
+
   return (
     <div>
       <h2>Confiesa tu ligue</h2>
@@ -147,25 +188,14 @@ export const MatchForm = () => {
       <p className={styles.alertLabel}>{err}</p>
       <h3>Lista de usuarios registrados: </h3>
       <div className={styles.scrollable}>
-      {
-        users.map(usr => {
+        {users.map((usr) => {
           return (
-            <span style={{display:'block'}} key={usr.username}>
+            <span style={{ display: 'block' }} key={usr.username}>
               {usr.username}
             </span>
-          )
-        })
-      }
+          );
+        })}
       </div>
-      {
-        openNotif &&
-        <MatchNotification 
-          openNotif={openNotif} 
-          setOpenNotif={setOpenNotif} 
-          notTo={notTo}
-          title="FELICIDADES"
-        />
-      }
     </div>
   );
-}
+};

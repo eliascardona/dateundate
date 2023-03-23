@@ -1,149 +1,146 @@
-import { useEffect, useState } from "react"
-import { auth, firestore } from "../firebase/base"
+import { useContext, useEffect, useState } from 'react';
+import { auth, firestore } from '../firebase/base';
 import {
   collection,
-  getDocs,
-  doc,
-  getDoc,
+  onSnapshot,
   query,
-  where
-} from "firebase/firestore"
-import { onAuthStateChanged } from "firebase/auth"
-import { Button } from "../components/utils/Button"
-import { Card } from "../components/utils/Card"
-import { PageHeader } from "../components/utils/PageHeader"
-import { ModalTwo } from "../components/modals/ModalTwo"
-import { MatchForm } from "../components/vitals/MatchForm"
-import { min } from "../utils/utils"
+  where,
+} from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { Button } from '../components/utils/Button';
+import { Card } from '../components/utils/Card';
+import { PageHeader } from '../components/utils/PageHeader';
+import { ModalTwo } from '../components/modals/ModalTwo';
+import { MatchNotification } from '../components/modals/MatchNotification';
+import { AuthContext } from '../contexts/AuthContext';
 
 function Home() {
-  const [userEmail, setUserEmail] = useState("")
-  const [posts, setPosts] = useState([])
-  const [matches, setMatches] = useState([])
-  const [users, setUsers] = useState([])
-  const [openModal, setOpenModal] = useState(false)
-  const [openNotif, setOpenNotif] = useState(false)
-  const [owner, setOwner] = useState()
+  const authData = useContext(AuthContext);
+  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [owner, setOwner] = useState();
   
+  //Fetch datos del usuario
   useEffect(() => {
-    const checkUserEmail = () => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) 
-          setUserEmail(user.email)
-      })
-    }
-    checkUserEmail()
-  }, [])
-
+    const q = query(
+      collection(firestore, 'users'),
+      where('email', '==', authData.user ? authData.user.email : "")
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        querySnapshot.docs[0] && setOwner(querySnapshot.docs[0].data());
+      });
+      return unsubscribe;
+    }, [authData]);
+    
+    //Fetch datos de todos los usuarios
   useEffect(() => {
-    const getOwner = async () => {
-      const docRef = doc(firestore, "users", userEmail);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setOwner(docSnap.data());
-      } else {
-        console.log("No user");
+    const unsubscribe = onSnapshot(
+      collection(firestore, 'users'),
+      (querySnapshot) => {
+        const res = [];
+        querySnapshot.forEach((doc) => {
+          res.push(doc.data());
+        });
+        setUsers(res);
       }
-    };
-    userEmail && getOwner();
-  }, [userEmail]);
+      );
+      return unsubscribe
+  }, []);
   
+  //Fetch de todos los posts
   useEffect(() => {
-    const getData = async () => {
-      const data = []
-      const collRef = collection(firestore, "users")
-      const coll = await getDocs(collRef)
-      let postDocs = coll.docs
-      postDocs.forEach(info => {
-        data.push(info.data())
-      })
-      setUsers(data)
-    }
-    getData()
-  }, [])
-  
-  useEffect(() => {
-    const getData = async () => {
-      const data = []
-      const collRef = collection(firestore, "posts")
-      const coll = await getDocs(collRef)
-      let postDocs = coll.docs
-      postDocs.forEach(info => {
-        data.push(info.data())
-      })
-      setPosts(data)
-    }
-    getData()
-  }, [])
-  
-  // IDEA DE FUNCION PARA BUSCAR LOS MATCHES
-  //
-  // let globalLikesArr = async function () {
-  //   let auxArr1 = []
-  //   users.forEach((itm, i, arr) => {
-  //     auxArr1.push(itm.likes)
-  //   })
-  //   return auxArr1
-  // }
-  
-  // let objetoRemitente = async function() {
-  //   const collRef = collection(firestore, "users")
-  //   const remitente = query(collRef, where("username", "==", owner.username))
-  //   const consultaRemitente = await getDocs(remitente)
-  //   let objRemitente
-  //   objRemitente = consultaRemitente.docs[0].data().likes
-  //   return objetoRemitente
-  // }
-  
-  // globalLikesArr().then(globalLikes => {
-  //   objetoRemitente().then(remLikes => {
-  //     remLikes.forEach(itm => 
-  //       globalLikes.filter(itmJ => {
-  //         if (itm === itmJ)
-  //           console.log(`match de ${itm} e ${itmJ}`)
-  //       })
-  //     )
-  //   })
-  // })
-  
-  // IDEA DE FUNCION PARA REVISAR CUAL DE LOS MATCH SUCEDIO PRIMERO
-  //
-  // useEffect(() => {
-  //   const handle = setInterval(async () => {
-  //     minTime = min(match.hour.flat())
-  //   }, 30*1000);
+    const unsubscribe = onSnapshot(
+      collection(firestore, 'posts'),
+      (querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push(doc.data());
+        });
+        data = data.sort((a, b) => b.timestamp - a.timestamp)
+        setPosts(data);
+      }
+      );
+      return unsubscribe;
+    }, []);
 
-  //   return () => clearInterval(handle);
-  // }, []);
-  
+
+
+    const [matches, setMatches] = useState([]);
+    const [notifStates, setNotifStates] = useState([]); //Estado de apertura de notificaciones de match según la cant de matches, hay n notifs. ej: [true, false, true]
+    
+    //Búsqueda de matches al cambiar el estado de owner o users
+    useEffect(() => {
+    const findMatches = () => {
+      const matches = [];
+      if (owner && users) {
+        const ownerLikes = owner.likes;
+        const otherUsers = users.filter((u) => u.id != owner.id);
+        
+        for (let user of otherUsers) {
+          if (
+            ownerLikes.includes(user.username) &&
+            user.likes.includes(owner.username)
+          ) {
+            matches.push(user);
+          }
+        }
+      }
+      setMatches(matches);
+      setNotifStates(
+        matches.map((value, i) => (notifStates[i] ? notifStates[i] : true))
+        ); //Inicializa las notificaciones como abiertas
+    };
+    findMatches();
+  }, [owner, users]);
+
+  const handleNotifStateChange = (i) => {
+    const nuevaLista = [...notifStates];
+    nuevaLista[i] = !nuevaLista[i];
+    setNotifStates(nuevaLista);
+  };
+
   return (
     <>
       <PageHeader />
-      <div style={{paddingTop:'15px', paddingLeft:'23px'}}>
+      <div style={{ paddingTop: '15px', paddingLeft: '23px' }}>
         <h1>ADAM LIKES YOU 🤑</h1>
-        {
-          posts.map((post, i, arr) => {
-            return (
-              <>
-                <Card 
-                  remitente={post.remitente}
-                  destinatario={post.destinatario} 
-                  cardID={post.cardID} 
-                  key={post.cardID} 
-                />
-              </>
-            )
-          })
-        }
-        <Button clickAction={()=>{setOpenModal(true)}} />
-        {
-          openModal &&
-          <ModalTwo 
-            openModal={openModal} setOpenModal={setOpenModal} title="CONFIESA TU LIGUE" />
-        }
+        {posts.map((post, i, arr) => {
+          return (
+            <Card
+              remitente={post.remitente}
+              destinatario={post.destinatario}
+              timestamp={post.timestamp}
+              key={post.cardID}
+            />
+          );
+        })}
+        <Button
+          clickAction={() => {
+            setOpenModal(true);
+          }}
+        />
+        {openModal && (
+          <ModalTwo
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            title="CONFIESA TU LIGUE"
+          />
+        )}
+        {matches.map((match, i) => {
+          return (
+            <MatchNotification
+              openNotif={notifStates[i]}
+              setOpenNotif={() => handleNotifStateChange(i)}
+              notTo={match.username}
+              title="FELICIDADES"
+              key={match.id}
+            />
+          );
+        })}
       </div>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

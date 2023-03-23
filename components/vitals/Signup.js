@@ -25,7 +25,7 @@ export const Signup = () => {
   useEffect(() => {
     async function checkUsername() {
       const usersRef = collection(firestore, "users")
-      const q = query(usersRef, where("username", "==", `@${username}`))
+      const q = query(usersRef, where("username", "==", `@${username.trim()}`))
       const querySnapshot = await getDocs(q)
       setUsernameAllowed(querySnapshot.docs.length === 0)
       //Pendiente, no prioridad: Aquí se deben de eliminar todos los espacios
@@ -37,6 +37,7 @@ export const Signup = () => {
 
   const signUp = async () => {
     const name = nameRef.current.value;
+    name = name.trim()
     //Ponemos la primer letra de cada palabra del nombre en mayúscula.
     if(name.length > 0) {
       const words = name.split(" ");
@@ -46,8 +47,11 @@ export const Signup = () => {
       name = words.join(" ")
     }
     const userName = usernameRef.current.value;
+    username = username.trim()
     const email = emailRef.current.value;
+    email = email.trim()
     const password = passwordRef.current.value;
+    password = password.trim()
     const res = await createUserWithEmailAndPassword(auth, email, password);
     usernameAllowed && await setDoc(doc(firestore, `users/${res.user.email}`), {
       email: res.user.email,

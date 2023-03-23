@@ -4,7 +4,7 @@ import { onIdTokenChanged } from "firebase/auth";
 import nookies from "nookies";
 import { useRouter } from "next/router";
 
-const AuthContext = createContext({ user: null });
+export const AuthContext = createContext({ user: null });
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -19,7 +19,6 @@ export function AuthProvider({ children }) {
       } else {
         const token = await user.getIdToken();
         setUser(user);
-        console.log(user);
         nookies.set(undefined, "token", token, { path: "/" });
         router.push("/");
       }
