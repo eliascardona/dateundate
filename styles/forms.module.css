@@ -99,6 +99,27 @@
 }
 
 .scrollable {
-    overflow: hidden;
+    height: 150px;
+    overflow: auto;
     overflow-y: scroll;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

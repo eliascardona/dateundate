@@ -104,7 +104,7 @@ function Home() {
     <>
       <PageHeader />
       <div style={{ paddingTop: '15px', paddingLeft: '23px' }}>
-        <h1>ADAM LIKES YOU 🤑</h1>
+        <h1>ADAM LIKES YOU 😏</h1>
         {posts.map((post, i, arr) => {
           return (
             <Card

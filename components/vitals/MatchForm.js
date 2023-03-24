@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { auth, firestore } from '../../firebase/base';
-import { onAuthStateChanged } from 'firebase/auth';
+import { firestore } from '../../firebase/base';
 import {
   arrayUnion,
   collection,
@@ -14,7 +13,7 @@ import {
   where,
 } from 'firebase/firestore';
 import styles from '../../styles/forms.module.css';
-import { nm, currTime } from '../../utils/utils';
+import { nm } from '../../utils/utils';
 import { AuthContext } from '../../contexts/AuthContext';
 
 export const MatchForm = () => {
@@ -24,6 +23,7 @@ export const MatchForm = () => {
   const usernameRef = useRef();
   const [users, setUsers] = useState([]);
   const [ganadores, setGanadores] = useState();
+  const [succesMsg, setsuccesMsg] = useState("")  
 
   //get users collection data
   useEffect(() => {
@@ -178,15 +178,22 @@ export const MatchForm = () => {
       />
       <button
         type="button"
-        onClick={confessCrush}
+        onClick={(e) => {
+          confessCrush()
+          setsuccesMsg("Confesión enviada con éxito")
+        }}
         disabled={!owner}
         className={styles.formBtn}
       >
         enviar
       </button>
       <br />
+      <strong style={{color: 'rgb(13, 187, 13)'}}>
+        {succesMsg}
+      </strong>
+      <br />
       <p className={styles.alertLabel}>{err}</p>
-      <h3>Lista de usuarios registrados: </h3>
+      <h3>Lista de usuarios registrados 🤫 </h3>
       <div className={styles.scrollable}>
         {users.map((usr) => {
           return (
