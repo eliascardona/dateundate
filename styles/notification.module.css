@@ -1,4 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 .globalContainer {
+	width: 100%;
+	height: 100%;
 	background-color: rgb(46 56 77 / 30%);
 	z-index: 0;
 	display: grid;
@@ -9,21 +13,37 @@
 .modalContainer {
 	width: 100%;
 	height: 100%;
-	gap: 20px;
 	pointer-events: auto;
 	position: fixed;
 	top: 0;
 	z-index: 2;
-	display: grid;
-	place-items: center;
-	align-self: center;
-	background-color: #ffffff;
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border: 1px solid var(--gh-grey-4);
 	border-radius: 4px;
 	outline: 0;
 	padding: 8px 24px;
 	margin: 0 auto;
+	color: #fefefe;
+	background: linear-gradient(90deg, #9d50bb, #2a5ce6);
+}
+
+.layout {
+    display: grid;
+	grid-template-columns: 4% 73% 21%;
+	place-items: center;
+	justify-self: center;
+}
+
+.center {
+    display: grid;
+	place-items: center;
+	justify-self: center;
+	text-align: center;
+}
+
+.title {
+	font-family: 'Pacifico', cursive;
+	line-height: 1.5em;
 }
 
 .btnPos {
@@ -54,10 +74,4 @@
     font-size: 20px;
     font-weight: 450;
 	font-family: inherit;
-}
-
-.centeredGrid {
-    display: grid;
-	place-items: center;
-	justify-self: center;
 }

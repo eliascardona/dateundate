@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+
+.container {
+    padding-top: 15px;
+    padding-left: 23px;
+}
+
+.title {
+    font-family: 'Nunito', sans-serif;
+}
+
+@media (min-width: 300px) and (max-width: 679px) {
+    .title {
+        font-size: 1.7em;
+    }
+}

@@ -16,14 +16,15 @@ import styles from '../../styles/forms.module.css';
 import { nm } from '../../utils/utils';
 import { AuthContext } from '../../contexts/AuthContext';
 
-export const MatchForm = () => {
+export const MatchForm = ({setOpenModal}) => {
   const authData = useContext(AuthContext);
   const [owner, setOwner] = useState();
   const [err, setErr] = useState('');
   const usernameRef = useRef();
   const [users, setUsers] = useState([]);
   const [ganadores, setGanadores] = useState();
-  const [succesMsg, setsuccesMsg] = useState("")  
+  const [succesMsg, setSuccesMsg] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   //get users collection data
   useEffect(() => {
@@ -74,6 +75,7 @@ export const MatchForm = () => {
 
   const confessCrush = async () => {
     setErr('');
+    setDisabled(true)
     const usersRef = collection(firestore, 'users');
 
     //Si el usuario no ingreso el "@" lo ingresamos nosotros.
@@ -104,6 +106,11 @@ export const MatchForm = () => {
     const usernameRemitente = consultaRemitente.docs[0].data().username;
 
     if (objetoDestinatario) {
+      if (objetoDestinatario.likes.includes(usernameRemitente)) {
+        setErr("Ya le enviaste tu confesión al usuario ingresado 🤷‍♂️")
+        setDisabled(false)
+        return
+      }
       let docID = `p${nm()}`;
       let date = new Date();
       await updateDoc(doc(firestore, 'users', objetoDestinatario.email), {
@@ -158,9 +165,11 @@ export const MatchForm = () => {
           });
         }
       }
+      setOpenModal(false)
     } else {
       setErr('El usuario ingresado no existe, vuelve a intentar.');
     }
+    setDisabled(false)
   };
 
   return (
@@ -178,11 +187,11 @@ export const MatchForm = () => {
       />
       <button
         type="button"
-        onClick={(e) => {
+        onClick={() => {
           confessCrush()
-          setsuccesMsg("Confesión enviada con éxito")
+          setSuccesMsg("Confesión enviada con éxito")
         }}
-        disabled={!owner}
+        disabled={disabled || !owner}
         className={styles.formBtn}
       >
         enviar
@@ -193,7 +202,7 @@ export const MatchForm = () => {
       </strong>
       <br />
       <p className={styles.alertLabel}>{err}</p>
-      <h3>Lista de usuarios registrados 🤫 </h3>
+      <h3>Lista de usuarios registrados: </h3>
       <div className={styles.scrollable}>
         {users.map((usr) => {
           return (

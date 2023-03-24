@@ -1,21 +1,21 @@
 import { useContext, useEffect, useState } from 'react';
-import { auth, firestore } from '../firebase/base';
+import { firestore } from '../firebase/base';
 import {
   collection,
   onSnapshot,
   query,
   where,
 } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
 import { Button } from '../components/utils/Button';
 import { Card } from '../components/utils/Card';
 import { PageHeader } from '../components/utils/PageHeader';
 import { ModalTwo } from '../components/modals/ModalTwo';
 import { MatchNotification } from '../components/modals/MatchNotification';
 import { AuthContext } from '../contexts/AuthContext';
+import styles from "../styles/home.module.css"
 
 function Home() {
-  const authData = useContext(AuthContext);
+  const authData = useContext(AuthContext)
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -100,11 +100,15 @@ function Home() {
     setNotifStates(nuevaLista);
   };
 
+  useEffect(() => {
+    console.log(notifStates)
+  }, [notifStates])
+
   return (
     <>
       <PageHeader />
-      <div style={{ paddingTop: '15px', paddingLeft: '23px' }}>
-        <h1>ADAM LIKES YOU 😏</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>ADAM LIKES YOU 😏</h1>
         {posts.map((post, i, arr) => {
           return (
             <Card
@@ -133,7 +137,6 @@ function Home() {
               openNotif={notifStates[i]}
               setOpenNotif={() => handleNotifStateChange(i)}
               notTo={match.username}
-              title="FELICIDADES"
               key={match.id}
             />
           );

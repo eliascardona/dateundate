@@ -8,8 +8,8 @@ export const ModalTwo = ({ openModal, setOpenModal, title }) => {
         <div className={styles.globalContainer}>
             <div className={styles.modalContainer}>
                 <div style={{marginTop:'15px', marginBottom:'15px'}}>
-                    <h1>{title}</h1>                                                
-                    <MatchForm />
+                    <h1>{title}</h1>
+                    <MatchForm setOpenModal={setOpenModal} />
                     <br/>
                     <div style={{paddingTop:'50px'}}>
                         <button type="button" className={styles.specialBtn} onClick={() => setOpenModal(false)}>
