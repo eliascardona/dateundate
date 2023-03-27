@@ -17,27 +17,35 @@
 	position: fixed;
 	top: 0;
 	z-index: 2;
-	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-	border: 1px solid var(--gh-grey-4);
+	background: linear-gradient(90deg, #9d50bb, #2a5ce6);
+	color: #fefefe;
+	border: 1px solid rgb(24, 24, 24);
 	border-radius: 4px;
 	outline: 0;
-	padding: 8px 24px;
 	margin: 0 auto;
-	color: #fefefe;
-	background: linear-gradient(90deg, #9d50bb, #2a5ce6);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.layout {
+.mainLy {
     display: grid;
-	grid-template-columns: 4% 73% 21%;
 	place-items: center;
-	justify-self: center;
+	grid-template-columns: 8% 82% 8%;
+	padding: 9.5em 0 5em 0;
+}
+
+.child {
+	height: 100%;
+	width: 100%;
+	padding: 0 1em 0 1em;
+    display: grid;
+	place-items: center;
+	text-align: center;
 }
 
 .center {
     display: grid;
 	place-items: center;
-	justify-self: center;
+	row-gap: 1.5em;
 	text-align: center;
 }
 

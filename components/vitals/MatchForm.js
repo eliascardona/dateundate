@@ -109,6 +109,7 @@ export const MatchForm = ({setOpenModal}) => {
       if (objetoDestinatario.likes.includes(usernameRemitente)) {
         setErr("Ya le enviaste tu confesión al usuario ingresado 🤷‍♂️")
         setDisabled(false)
+        setErr("")        
         return
       }
       let docID = `p${nm()}`;
@@ -165,20 +166,25 @@ export const MatchForm = ({setOpenModal}) => {
           });
         }
       }
-      setOpenModal(false)
+      // setOpenModal(false)
     } else {
       setErr('El usuario ingresado no existe, vuelve a intentar.');
     }
     setDisabled(false)
+    setSuccesMsg("Confesión enviada con éxito")
+    setTimeout(() => {
+      setSuccesMsg("")
+    }, 4000)
   };
 
   return (
-    <div>
-      <h2>Confiesa tu ligue</h2>
+    <div className={styles.mainLy}>
+      <h2>¡Confiesa tu ligue!</h2>
+      <h3>Escribe el username de tu crush</h3>
       <input
         type="text"
         ref={usernameRef}
-        placeholder="A quien va dirigido (username)"
+        placeholder="@micrush"
         className={styles.input}
         onChange={(e) => {
           e.preventDefault();
@@ -188,8 +194,7 @@ export const MatchForm = ({setOpenModal}) => {
       <button
         type="button"
         onClick={() => {
-          confessCrush()
-          setSuccesMsg("Confesión enviada con éxito")
+          confessCrush()          
         }}
         disabled={disabled || !owner}
         className={styles.formBtn}

@@ -1,16 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
 
 .container {
-    padding-top: 15px;
-    padding-left: 23px;
+    display: grid;
+    place-items: center;
+    padding: 0 3em 2em 3em;
 }
 
 .title {
     font-family: 'Nunito', sans-serif;
+    padding-top: 1em;
+    padding-left: 3em;
 }
 
-@media (min-width: 300px) and (max-width: 679px) {
+.specialBtn {
+    position: fixed;
+    bottom: 40px;
+    width: 85%;
+	padding: 14px 0;
+	border-style: none;
+	border-radius: 30px;
+	color: #fefefe;
+	background-color: rgb(0, 102, 255);
+    font-size: 20px;
+	font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+}
+
+@media (min-width: 250px) and (max-width: 700px) {
     .title {
         font-size: 1.7em;
+        padding-left: 1em;
     }
 }

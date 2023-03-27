@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { firestore } from '../firebase/base';
 import {
   collection,
@@ -6,7 +6,6 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { Button } from '../components/utils/Button';
 import { Card } from '../components/utils/Card';
 import { PageHeader } from '../components/utils/PageHeader';
 import { ModalTwo } from '../components/modals/ModalTwo';
@@ -103,12 +102,13 @@ function Home() {
   useEffect(() => {
     console.log(notifStates)
   }, [notifStates])
+  const btnRef = useRef()
 
   return (
     <>
       <PageHeader />
+      <h1 className={styles.title}>ADAM LIKES YOU</h1>
       <div className={styles.container}>
-        <h1 className={styles.title}>ADAM LIKES YOU 😏</h1>
         {posts.map((post, i, arr) => {
           return (
             <Card
@@ -117,25 +117,25 @@ function Home() {
               timestamp={post.timestamp}
               key={post.cardID}
             />
-          );
+          )
         })}
-        <Button
-          clickAction={() => {
-            setOpenModal(true);
-          }}
-        />
+        <button type="button" className={styles.specialBtn} onClick={() => setOpenModal(true)} ref={btnRef}>
+          CONFESAR LIGUE
+        </button>
         {openModal && (
           <ModalTwo
             openModal={openModal}
             setOpenModal={setOpenModal}
-            title="CONFIESA TU LIGUE"
           />
         )}
         {matches.map((match, i) => {
           return (
             <MatchNotification
               openNotif={notifStates[i]}
-              setOpenNotif={() => handleNotifStateChange(i)}
+              setOpenNotif={() => {
+                handleNotifStateChange(i)
+                // btnRef.current.style.display="none"
+              }}
               notTo={match.username}
               key={match.id}
             />

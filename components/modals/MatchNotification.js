@@ -7,23 +7,34 @@ export const MatchNotification = ({ openNotif, setOpenNotif, notTo }) => {
         { openNotif && 
         <div className={styles.globalContainer}>
             <div className={styles.modalContainer}>
-                <div className={styles.layout}>
+                <div className={styles.mainLy}>
                     {/* ------------------------- */}
-                    <div className={styles.center}>
+                    <div 
+                        className={styles.child} 
+                        style={{height:'80%', width:'200%'}} 
+                        onClick={() => setOpenNotif(not => not-1)}
+                    >
+                        <div>
+                            <ion-icon style={{fontSize:'48px'}} name="chevron-back"></ion-icon>
+                        </div>
                     </div>
                     {/* ------------------------- */}
                     <div className={styles.center}>
-                        <h1 className={styles.title}>
+                        <h2 className={styles.title}>
                             FELICIDADES, ESTOS SON TUS MATCHES
-                        </h1>
+                        </h2>
                         <ion-icon style={{fontSize:'64px'}} name="heart"></ion-icon>
                         <h2>{notTo}</h2>
                         <p>Ya hiciste match, ve y haz lo tuyo</p>
                     </div>
                     {/* ------------------------- */}
-                    <div className={styles.center} style={{height:'80%', width:'100%'}} onClick={setOpenNotif}>
+                    <div 
+                        className={styles.child} 
+                        style={{height:'80%', width:'200%'}} 
+                        onClick={() => setOpenNotif(not => not+1)}
+                    >
                         <div>
-                            <ion-icon style={{fontSize:'60px'}} name="chevron-forward"></ion-icon>
+                            <ion-icon style={{fontSize:'48px'}} name="chevron-forward"></ion-icon>
                         </div>
                     </div>
                     {/* ------------------------- */}
