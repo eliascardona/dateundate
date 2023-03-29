@@ -63,32 +63,28 @@ function Home() {
       return unsubscribe;
     }, []);
 
-
-
     const [matches, setMatches] = useState([]);
-    const [notifStates, setNotifStates] = useState([]); //Estado de apertura de notificaciones de match según la cant de matches, hay n notifs. ej: [true, false, true]
+    //Estado de apertura de notificaciones de match según la cant de matches, hay n notifs. ej: [true, false, true]
+    const [notifStates, setNotifStates] = useState([]);
     
     //Búsqueda de matches al cambiar el estado de owner o users
     useEffect(() => {
     const findMatches = () => {
       const matches = [];
-      if (owner && users) {
+      if(owner && users) {
         const ownerLikes = owner.likes;
         const otherUsers = users.filter((u) => u.id != owner.id);
-        
-        for (let user of otherUsers) {
-          if (
-            ownerLikes.includes(user.username) &&
-            user.likes.includes(owner.username)
-          ) {
+        for(let user of otherUsers) {
+          if ( ownerLikes.includes(user.username) && user.likes.includes(owner.username) ) {
             matches.push(user);
           }
         }
       }
       setMatches(matches);
+      //Inicializa las notificaciones como abiertas
       setNotifStates(
         matches.map((value, i) => (notifStates[i] ? notifStates[i] : true))
-        ); //Inicializa las notificaciones como abiertas
+      );
     };
     findMatches();
   }, [owner, users]);
@@ -98,12 +94,7 @@ function Home() {
     nuevaLista[i] = !nuevaLista[i];
     setNotifStates(nuevaLista);
   };
-
-  useEffect(() => {
-    console.log(notifStates)
-  }, [notifStates])
-  const btnRef = useRef()
-
+  
   return (
     <>
       <PageHeader />
@@ -119,7 +110,7 @@ function Home() {
             />
           )
         })}
-        <button type="button" className={styles.specialBtn} onClick={() => setOpenModal(true)} ref={btnRef}>
+        <button type="button" className={styles.specialBtn} onClick={() => setOpenModal(true)}>
           CONFESAR LIGUE
         </button>
         {openModal && (
@@ -134,7 +125,6 @@ function Home() {
               openNotif={notifStates[i]}
               setOpenNotif={() => {
                 handleNotifStateChange(i)
-                // btnRef.current.style.display="none"
               }}
               notTo={match.username}
               key={match.id}

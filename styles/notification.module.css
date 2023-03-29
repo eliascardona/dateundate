@@ -29,7 +29,7 @@
 .mainLy {
     display: grid;
 	place-items: center;
-	grid-template-columns: 8% 82% 8%;
+	/* grid-template-columns: 8% 82% 8%; */
 	padding: 9.5em 0 5em 0;
 }
 
