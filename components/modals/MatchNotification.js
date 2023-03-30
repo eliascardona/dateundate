@@ -1,17 +1,17 @@
 import React from 'react'
 import styles from "../../styles/notification.module.css"
 
-export const MatchNotification = ({ openNotif, setOpenNotif, notTo }) => {
+export const MatchNotification = ({ openNotif, setOpenNotif, notTo, notifStatesParam }) => {
     return (
     <>
-        { openNotif && 
+        {openNotif && 
         <div className={styles.globalContainer}>
             <div className={styles.modalContainer}>
-                <div className={styles.mainLy}>
+                <div className={styles.mainLy} style={{gridTemplateColumns: `${notifStatesParam.length<2?'100%':'8% 82% 8%'}`}}>
                     {/* ------------------------- */}
                     <div 
                         className={styles.child} 
-                        style={{height:'80%', width:'200%'}} 
+                        style={{height:'80%', width:'200%', display: `${notifStatesParam.length<2?'none':'block'}`}} 
                         onClick={() => setOpenNotif(not => not-1)}
                     >
                         <div>
@@ -21,7 +21,9 @@ export const MatchNotification = ({ openNotif, setOpenNotif, notTo }) => {
                     {/* ------------------------- */}
                     <div className={styles.center}>
                         <h2 className={styles.title}>
-                            FELICIDADES, ESTOS SON TUS MATCHES
+                            {
+                                notifStatesParam.length < 2 ? 'FELICIDADES, HICISTE MATCH CON' : 'FELICIDADES, ESTOS SON TUS MATCHES'
+                            }
                         </h2>
                         <ion-icon style={{fontSize:'64px'}} name="heart"></ion-icon>
                         <h2>{notTo}</h2>
@@ -30,7 +32,7 @@ export const MatchNotification = ({ openNotif, setOpenNotif, notTo }) => {
                     {/* ------------------------- */}
                     <div 
                         className={styles.child} 
-                        style={{height:'80%', width:'200%'}} 
+                        style={{height:'80%', width:'200%', display:`${notifStatesParam.length<2?'none':'block'}`}} 
                         onClick={() => setOpenNotif(not => not+1)}
                     >
                         <div>

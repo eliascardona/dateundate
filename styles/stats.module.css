@@ -1,0 +1,46 @@
+.globalContainer {
+    width: 100%;
+    height: 100vh;
+	display: grid;
+	place-items: center;
+}
+
+.mainLy {
+    width: 70%;
+    height: 90%;
+    display: grid;
+	grid-template-rows: 30% 70%;
+    place-items: center;
+}
+
+.mainLy > div {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+}
+
+.formBtn {
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 7px;
+	color: #fefefe;
+	background-color: #444444;
+    font-size: 16px;
+	font-family: inherit;
+}
+
+.specialBtn {
+    width: 110%;
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 30px;
+	color: #fefefe;
+	background-color: rgb(0, 102, 255);
+    font-size: 20px;
+    font-weight: 450;
+	font-family: inherit;
+}

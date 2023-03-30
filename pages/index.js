@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { firestore } from '../firebase/base';
 import {
   collection,
@@ -30,9 +30,9 @@ function Home() {
         querySnapshot.docs[0] && setOwner(querySnapshot.docs[0].data());
       });
       return unsubscribe;
-    }, [authData]);
+  }, [authData]);
     
-    //Fetch datos de todos los usuarios
+  //Fetch datos de todos los usuarios
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(firestore, 'users'),
@@ -43,8 +43,8 @@ function Home() {
         });
         setUsers(res);
       }
-      );
-      return unsubscribe
+    );
+    return unsubscribe
   }, []);
   
   //Fetch de todos los posts
@@ -59,16 +59,16 @@ function Home() {
         data = data.sort((a, b) => b.timestamp - a.timestamp)
         setPosts(data);
       }
-      );
-      return unsubscribe;
-    }, []);
+    );
+    return unsubscribe;
+  }, []);
 
-    const [matches, setMatches] = useState([]);
-    //Estado de apertura de notificaciones de match según la cant de matches, hay n notifs. ej: [true, false, true]
-    const [notifStates, setNotifStates] = useState([]);
+  const [matches, setMatches] = useState([]);
+  //Estado de apertura de notificaciones de match según la cant de matches, hay n notifs. ej: [true, false, true]
+  const [notifStates, setNotifStates] = useState([]);
     
-    //Búsqueda de matches al cambiar el estado de owner o users
-    useEffect(() => {
+  //Búsqueda de matches al cambiar el estado de owner o users
+  useEffect(() => {
     const findMatches = () => {
       const matches = [];
       if(owner && users) {
@@ -128,6 +128,7 @@ function Home() {
               }}
               notTo={match.username}
               key={match.id}
+              notifStatesParam={notifStates}
             />
           );
         })}
