@@ -72,6 +72,7 @@ const handleSignUp = async (e) => {
   setShowErr(false)
   if(usernameAllowed) {
     signUp()
+    router.push("/")
   } else {
     setShowErr(true)
   }

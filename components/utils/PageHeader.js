@@ -1,43 +1,27 @@
 import React from "react";
-import Link from "next/link";
 import { auth } from "../../firebase/base";
 import { signOut } from "firebase/auth";
+import styles from "../../styles/pageheader.module.css"
+import { useRouter } from "next/router";
 
 export const PageHeader = () => {
-  const headerStyles={
-    position: 'relative',
-	  top: '0',
-	  padding: '10px 1rem 13px 1rem',
-	  color: '#fff',
-	  backgroundColor: '#000',
-	  display: 'grid',
-    gridTemplateColumns: '50% 50%',
-	  placeItems: 'center',
-	  borderBottom: '3px solid rgb(0, 204, 255)',
-    cursor: 'pointer'
-  }
-
-  const linkStyle = {
-    textDecoration: 'none',
-    color: 'inherit',
-    fontSize: '18',
-    fontWeight: '500'
-  }
-
+  const router = useRouter()
   return (
     <>
-      <header style={headerStyles}>
+      <header className={styles.headerStyles}>
         <div>
-          <Link href="/">
-            <a style={linkStyle}>
-              DATÉ UN DATE
-            </a>
-          </Link>
+          <span className={styles.linkStyle} onClick={() => router.push("/")}>
+            <span className={styles.text}>
+              DATE UN
+            </span>
+            {" "}
+            <span className={styles.font}>
+              DATE
+            </span>
+          </span>
         </div>
         <div>
-          <h4 style={{textDecoration:'underline'}} onClick={() => signOut(auth)}>
-            salir
-            {"     "}
+          <h4 onClick={() => signOut(auth)}>
             <ion-icon name="exit-outline"></ion-icon>
           </h4>
         </div>

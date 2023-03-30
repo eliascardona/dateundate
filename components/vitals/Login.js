@@ -8,12 +8,21 @@ export const Login = () => {
   const router = useRouter()
   const emailRef = useRef()
   const passwordRef = useRef()
-  
+  const [error, setError] = useState("")
+
   const login = async (e) => {
     e.preventDefault()
-    const email = emailRef.current.value
-    const password = passwordRef.current.value
-    await signInWithEmailAndPassword(auth, email, password)
+    try {
+      const email = emailRef.current.value
+      const password = passwordRef.current.value
+      await signInWithEmailAndPassword(auth, email, password)
+      router.push("/")
+    } catch(error) {
+      let errorCode = error.code
+      if (errorCode == "auth/wrong-password") {
+        setError("Contraseña incorrecta")
+      }
+    }
   }
 
   return (
@@ -35,11 +44,14 @@ export const Login = () => {
         />
         <button
           type="button"
-          onClick={(evt) => login(evt)}
+          onClick={login}
           className={styles.formBtn}
         >
           Login
         </button>
+        <small className={styles.payMsg} style={{color:'red'}}>
+          {error}
+        </small>
         <small className={styles.payMsg}>
           ¿Nuevo por aquí?
           <span onClick={()=> router.push("/signup")} className="text-primary">

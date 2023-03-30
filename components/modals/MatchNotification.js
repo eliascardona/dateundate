@@ -7,12 +7,12 @@ export const MatchNotification = ({ openNotif, setOpenNotif, notTo, notifStatesP
         {openNotif && 
         <div className={styles.globalContainer}>
             <div className={styles.modalContainer}>
-                <div className={styles.mainLy} style={{gridTemplateColumns: `${notifStatesParam.length<2?'100%':'8% 82% 8%'}`}}>
+                <div className={styles.mainLy} style={{gridTemplateColumns:`${notifStatesParam.length<2?'100%':'8% 82% 8%'}`}}>
                     {/* ------------------------- */}
                     <div 
                         className={styles.child} 
-                        style={{height:'80%', width:'200%', display: `${notifStatesParam.length<2?'none':'block'}`}} 
-                        onClick={() => setOpenNotif(not => not-1)}
+                        style={{height:'80%', width:'200%', display:`${notifStatesParam.length<2?'none':'block'}`}} 
+                        onClick={setOpenNotif}
                     >
                         <div>
                             <ion-icon style={{fontSize:'48px'}} name="chevron-back"></ion-icon>
@@ -27,13 +27,16 @@ export const MatchNotification = ({ openNotif, setOpenNotif, notTo, notifStatesP
                         </h2>
                         <ion-icon style={{fontSize:'64px'}} name="heart"></ion-icon>
                         <h2>{notTo}</h2>
-                        <p>Ya hiciste match, ve y haz lo tuyo</p>
+                        <p>¡has hecho match, ve y haz lo tuyo!</p>
+                        <span className={styles.close} style={{display:`${notifStatesParam.length<2?'block':'none'}`}} onClick={setOpenNotif}>
+                            cerrar
+                        </span>
                     </div>
                     {/* ------------------------- */}
                     <div 
                         className={styles.child} 
                         style={{height:'80%', width:'200%', display:`${notifStatesParam.length<2?'none':'block'}`}} 
-                        onClick={() => setOpenNotif(not => not+1)}
+                        onClick={setOpenNotif}
                     >
                         <div>
                             <ion-icon style={{fontSize:'48px'}} name="chevron-forward"></ion-icon>

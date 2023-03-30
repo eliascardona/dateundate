@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.headerStyles{
+    position: relative;
+    top: 0;
+    padding: 10px 1rem 13px 1rem;
+    color: #fff;
+    background-color: #000;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    place-items: center;
+    border-bottom: 4px solid rgb(0 102 255);
+    cursor: pointer;
+}
+
+.linkStyle {
+    text-decoration: none;
+    color: inherit;
+    font-size: 18;
+    font-weight: 500;
+}
+
+.text {
+    font-weight: 700;
+}
+
+.font {
+    font-family: 'Pacifico', cursive;
+}

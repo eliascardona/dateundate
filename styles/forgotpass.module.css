@@ -1,0 +1,41 @@
+.centeredGrid {
+    display: grid;
+	place-items: center;
+    grid-template-columns: 100%;
+}
+
+.cardWhite {
+	margin: 30px 30px 60px 30px;
+	padding: 20px;
+	color: #0a0a0a;
+	background-color: #fefefe;
+	border-radius: 6px;
+}
+
+.input {
+    display: block;
+    margin: 7px 0;
+    padding: 9px 40px 9px 15px;
+    border: 2px solid #eee;
+    border-radius: 5px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 5px 0px;
+    font-size: 16px;
+}
+
+.formBtn {
+    margin: 5px;
+	padding: 10px 50px 10px 50px;
+	border-style: none;
+	border-radius: 7px;
+	color: #fefefe;
+	background-color: #444444;
+    font-size: 16px;
+	font-family: inherit;
+}
+
+.payMsg {
+    display: block;
+    margin: 4px 6px 12px 0;
+    text-decoration: underline;
+    cursor: pointer;
+}

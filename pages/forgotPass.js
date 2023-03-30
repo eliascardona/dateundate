@@ -1,14 +1,13 @@
-import React, { useRef, useState } from "react"
+import React, { useRef } from "react"
 import { auth } from "../firebase/base"
 import { sendPasswordResetEmail } from "firebase/auth"
 import { useRouter } from "next/router"
 import { PageHeader } from '../components/utils/PageHeader'
-import styles from "../styles/forms.module.css"
+import styles from "../styles/forgotpass.module.css"
 
 function forgotPass() {
   const router = useRouter()
   const emailRef = useRef()
-  const [error, setError] = useState("")
 
   const requestLink = async (e) => {
     e.preventDefault()
@@ -20,7 +19,7 @@ function forgotPass() {
   return (
     <>
       <PageHeader />
-      <div className={styles.centeredForm}>
+      <div className={styles.centeredGrid}>
         <div className={styles.cardWhite}>
           <h2>Recuperar contraseña</h2>
             <span>Ingresa el correo con el que te registraste</span>
@@ -30,10 +29,6 @@ function forgotPass() {
               placeholder="name@somemail.com"
               className={styles.input}
             />
-            <small className={styles.payMsg}>
-              {error}
-            </small>
-            <br/>
             <button
               type="button"
               onClick={requestLink}
@@ -41,6 +36,9 @@ function forgotPass() {
             >
               Enviar código
             </button>
+            <small className={styles.payMsg} onClick={() => router.push("/login")}>
+              Regresar al login
+            </small>
           </div>
         </div>
     </>
